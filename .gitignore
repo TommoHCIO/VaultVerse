@@ -44,3 +44,4 @@ next-env.d.ts
  
 # Windows reserved filename accidentally created; ignore to avoid Git errors
 nul
+.env
