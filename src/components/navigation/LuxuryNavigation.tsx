@@ -26,7 +26,8 @@ import {
   Zap,
   Activity,
   Award,
-  Sparkles
+  Sparkles,
+  Dice1
 } from 'lucide-react';
 
 export interface NavigationItem {
@@ -67,6 +68,13 @@ export function LuxuryNavigation() {
       label: 'Arena',
       icon: Target,
       badge: 'LIVE'
+    },
+    {
+      href: '/games',
+      label: 'Games',
+      icon: Dice1,
+      badge: 'NEW',
+      isNew: true
     },
     {
       href: '/events',

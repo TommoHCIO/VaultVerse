@@ -110,6 +110,12 @@ export default function HomePage() {
               <Link href="/arena" className="text-slate-300 hover:text-yellow-400 transition-colors font-medium">
                 Arena
               </Link>
+              <Link href="/games" className="relative text-slate-300 hover:text-yellow-400 transition-colors font-medium">
+                Games
+                <span className="absolute -top-2 -right-8 bg-gradient-to-r from-yellow-500 to-yellow-400 text-gray-900 text-xs px-2 py-0.5 rounded-full font-bold">
+                  NEW
+                </span>
+              </Link>
               <Link href="/events" className="text-slate-300 hover:text-emerald-400 transition-colors font-medium">
                 Events
               </Link>
