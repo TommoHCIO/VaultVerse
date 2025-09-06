@@ -31,7 +31,6 @@ import {
   LayoutSwitcher,
   ExpandablePanel,
   AnimatedModal,
-  StaggerContainer,
   SwipeableCard,
   TiltCard,
   LongPress,
@@ -58,8 +57,7 @@ export default function AnimationsPage() {
   ];
 
   const [items, setItems] = useState(mockItems);
-  const [sortBy, setSortBy] = useState<'name' | 'value'>('value');
-  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
+  // Removed unused sorting state to satisfy strict TS checks
 
   // Progress simulation
   const runProgress = () => {
