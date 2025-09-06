@@ -11,7 +11,6 @@ import {
   Award,
   Sparkles,
   TrendingUp,
-  Calendar,
   Gift,
   Zap,
   Users,
