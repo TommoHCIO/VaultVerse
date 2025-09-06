@@ -1,0 +1,884 @@
+@import 'tailwindcss';
+
+@theme {
+  /* Premium Business/Wealth Color Palette */
+  --color-vaultor-dark: #0B1426;
+  --color-vaultor-light: #1e293b;
+  --color-vaultor-surface: #334155;
+  
+  /* Executive Primary Colors */
+  --color-platinum: #E5E7EB;
+  --color-platinum-light: #F8FAFC;
+  --color-platinum-dark: #D1D5DB;
+  
+  --color-deep-navy: #0F172A;
+  --color-navy-light: #1E293B;
+  --color-navy-medium: #334155;
+  
+  /* Premium Accent Colors */
+  --color-champagne-gold: #D4AF37;
+  --color-champagne-light: #E6C757;
+  --color-champagne-dark: #B8941F;
+  
+  --color-emerald-success: #10B981;
+  --color-emerald-light: #34D399;
+  --color-emerald-dark: #059669;
+  
+  --color-burgundy-danger: #991B1B;
+  --color-burgundy-light: #DC2626;
+  --color-burgundy-dark: #7F1D1D;
+  
+  --color-sapphire-info: #0EA5E9;
+  --color-sapphire-light: #38BDF8;
+  --color-sapphire-dark: #0284C7;
+  
+  /* Refined Gaming Colors */
+  --color-neon-cyan: #38BDF8;
+  --color-neon-green: #10B981;
+  --color-neon-purple: #8B5CF6;
+  --color-neon-pink: #F472B6;
+  --color-neon-yellow: #FCD34D;
+  
+  /* Premium Metal Effects */
+  --color-shield-gold: #D4AF37;
+  --color-shield-silver: #E5E7EB;
+  --color-shield-bronze: #CD7F32;
+  --color-shield-platinum: #F8FAFC;
+  
+  /* Typography */
+  --font-family-sans: var(--font-geist-sans), system-ui, sans-serif;
+  --font-family-mono: var(--font-geist-mono), monospace;
+  --font-family-display: 'Inter Display', var(--font-geist-sans), system-ui, sans-serif;
+  
+  /* Premium Shadow Effects */
+  --box-shadow-executive: 0 4px 20px rgba(11, 20, 38, 0.4);
+  --box-shadow-luxury: 0 8px 32px rgba(212, 175, 55, 0.15);
+  --box-shadow-depth: 0 12px 48px rgba(0, 0, 0, 0.25);
+  --box-shadow-glow-sm: 0 0 10px rgba(16, 185, 129, 0.3);
+  --box-shadow-glow: 0 0 20px rgba(16, 185, 129, 0.4);
+  --box-shadow-glow-lg: 0 0 40px rgba(16, 185, 129, 0.5);
+  --box-shadow-neon: 0 0 5px #38BDF8, 0 0 20px #38BDF8;
+  
+  /* Premium Gradients */
+  --gradient-executive: linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #334155 100%);
+  --gradient-gold: linear-gradient(135deg, #D4AF37 0%, #E6C757 50%, #B8941F 100%);
+  --gradient-platinum: linear-gradient(135deg, #F8FAFC 0%, #E5E7EB 50%, #D1D5DB 100%);
+  --gradient-wealth: linear-gradient(135deg, #0B1426 0%, #10B981 100%);
+  --gradient-metal: linear-gradient(135deg, #E5E7EB 0%, #F8FAFC 25%, #D1D5DB 50%, #E5E7EB 75%, #F8FAFC 100%);
+}
+
+/* 2025 PWA & Accessibility Enhancement Styles */
+
+:root {
+  /* Accessibility Motion Variables */
+  --motion-duration: 0.3s;
+  --motion-timing: cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* Enhanced Focus Ring Variables */
+  --focus-ring-width: 2px;
+  --focus-ring-offset: 2px;
+  --focus-ring-color: #00ccff;
+  
+  /* High Contrast Mode Variables */
+  --contrast-bg: #111827;
+  --contrast-text: #ffffff;
+  --contrast-border: #d1d5db;
+}
+
+/* Base Accessibility Styles */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1, 'pnum' 1, 'tnum' 0, 'onum' 1, 'lnum' 0, 'dlig' 0;
+}
+
+/* Screen Reader Only Content */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.sr-only:focus,
+.sr-only:active {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: inherit;
+  margin: inherit;
+  overflow: visible;
+  clip: auto;
+  white-space: inherit;
+}
+
+.focus-within\:not-sr-only:focus-within {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: inherit;
+  margin: inherit;
+  overflow: visible;
+  clip: auto;
+  white-space: inherit;
+}
+
+/* Enhanced Focus Indicators */
+.focus-indicators *:focus {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+  border-radius: 4px;
+}
+
+.focus-indicators button:focus,
+.focus-indicators a:focus,
+.focus-indicators input:focus,
+.focus-indicators select:focus,
+.focus-indicators textarea:focus {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+  box-shadow: 0 0 0 calc(var(--focus-ring-width) + var(--focus-ring-offset)) rgba(0, 255, 136, 0.2);
+}
+
+/* Reduced Motion */
+.reduced-motion *,
+.reduced-motion *::before,
+.reduced-motion *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* High Contrast Mode */
+.high-contrast {
+  filter: contrast(1.5) brightness(1.1);
+}
+
+.high-contrast .glass-card {
+  background: var(--contrast-bg) !important;
+  border: 2px solid var(--contrast-border) !important;
+}
+
+.high-contrast .text-gray-400,
+.high-contrast .text-gray-500,
+.high-contrast .text-gray-600 {
+  color: var(--contrast-text) !important;
+}
+
+/* Large Text Mode */
+.large-text {
+  font-size: 18px !important;
+}
+
+.large-text .text-xs {
+  font-size: 0.875rem !important;
+}
+
+.large-text .text-sm {
+  font-size: 1rem !important;
+}
+
+.large-text .text-base {
+  font-size: 1.125rem !important;
+}
+
+.large-text .text-lg {
+  font-size: 1.25rem !important;
+}
+
+.large-text .text-xl {
+  font-size: 1.5rem !important;
+}
+
+/* Color Blindness Filters */
+.colorblind-protanopia {
+  filter: url('#protanopia-filter');
+}
+
+.colorblind-deuteranopia {
+  filter: url('#deuteranopia-filter');
+}
+
+.colorblind-tritanopia {
+  filter: url('#tritanopia-filter');
+}
+
+/* Touch Enhancements for Mobile */
+@media (hover: none) and (pointer: coarse) {
+  /* Increase touch target sizes */
+  button,
+  input,
+  select,
+  textarea,
+  a {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Improve touch feedback */
+  button:active,
+  input:active,
+  select:active,
+  textarea:active,
+  a:active {
+    transform: scale(0.98);
+    transition: transform 0.1s ease;
+  }
+  
+  /* Enhanced scrolling */
+  * {
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* Mobile-First Responsive Typography */
+@media screen and (max-width: 640px) {
+  html {
+    font-size: 16px;
+  }
+  
+  h1 {
+    font-size: 2rem !important;
+    line-height: 1.2;
+  }
+  
+  h2 {
+    font-size: 1.5rem !important;
+    line-height: 1.3;
+  }
+  
+  h3 {
+    font-size: 1.25rem !important;
+    line-height: 1.4;
+  }
+  
+  /* Better mobile spacing */
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+/* PWA Specific Styles */
+@media all and (display-mode: standalone) {
+  /* Hide elements not needed in PWA mode */
+  .pwa-hide {
+    display: none !important;
+  }
+  
+  /* Add safe area padding for devices with notches */
+  body {
+    padding-top: env(safe-area-inset-top);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  
+  /* Adjust status bar appearance */
+  .pwa-status-bar {
+    background: #0a0a0a;
+    height: env(safe-area-inset-top);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 9999;
+  }
+}
+
+/* iOS Safari Specific Fixes */
+@supports (-webkit-touch-callout: none) {
+  /* Fix viewport height on iOS */
+  .min-h-screen {
+    min-height: -webkit-fill-available;
+  }
+  
+  /* Fix input zoom on iOS */
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="search"],
+  input[type="tel"],
+  input[type="url"],
+  select,
+  textarea {
+    font-size: 16px;
+  }
+}
+
+/* Enhanced Glass Effect with Better Performance */
+.glass-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+/* Improved Animation Performance */
+.animate-pulse,
+.animate-spin,
+.animate-bounce {
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+/* Better Gradient Performance */
+.mesh-gradient {
+  background: 
+    radial-gradient(ellipse 80% 80% at 50% -20%, rgba(120, 119, 198, 0.15), transparent),
+    radial-gradient(ellipse 80% 80% at 80% 50%, rgba(255, 136, 0, 0.1), transparent),
+    radial-gradient(ellipse 80% 80% at 0% 50%, rgba(0, 255, 136, 0.1), transparent),
+    radial-gradient(ellipse 80% 80% at 50% 100%, rgba(0, 204, 255, 0.1), transparent),
+    linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+  will-change: transform;
+}
+
+/* Keyboard Navigation Enhancements */
+.keyboard-nav *:focus {
+  z-index: 10;
+  position: relative;
+}
+
+/* Better Button States */
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+button:disabled:hover {
+  transform: none !important;
+}
+
+/* Improved Form Accessibility */
+input:invalid {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 1px #ef4444;
+}
+
+input:invalid:focus {
+  outline-color: #ef4444;
+}
+
+/* Enhanced Loading States */
+.loading {
+  pointer-events: none;
+  cursor: wait;
+}
+
+.loading * {
+  pointer-events: none;
+}
+
+/* Better Error States */
+.error {
+  border-color: #ef4444 !important;
+  background-color: rgba(239, 68, 68, 0.1) !important;
+}
+
+/* Success States */
+.success {
+  border-color: #22c55e !important;
+  background-color: rgba(34, 197, 94, 0.1) !important;
+}
+
+/* Print Styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  * {
+    background: transparent !important;
+    color: black !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+  
+  a,
+  a:visited {
+    text-decoration: underline;
+  }
+  
+  a[href]:after {
+    content: " (" attr(href) ")";
+  }
+  
+  .glass-card {
+    background: white !important;
+    border: 1px solid #ccc !important;
+  }
+}
+
+/* Dark Mode Enhancements */
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+  }
+}
+
+/* Utility Classes for Mobile Optimization */
+.touch-manipulation {
+  touch-action: manipulation;
+}
+
+.scroll-smooth {
+  scroll-behavior: smooth;
+}
+
+.scroll-auto {
+  scroll-behavior: auto;
+}
+
+/* Better Mobile Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 255, 136, 0.5);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 255, 136, 0.7);
+}
+
+/* Mobile Viewport Height Fix */
+.min-h-screen-mobile {
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+/* Progressive Enhancement Classes */
+.js .no-js {
+  display: none !important;
+}
+
+.no-js .js-only {
+  display: none !important;
+}
+
+/* Accessibility Announcement Region */
+.announce-region {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* Better Text Selection */
+::selection {
+  background: rgba(0, 255, 136, 0.3);
+  color: inherit;
+}
+
+::-moz-selection {
+  background: rgba(16, 185, 129, 0.3);
+  color: inherit;
+}
+
+/* ===============================================
+   2025 PREMIUM BUSINESS/WEALTH DESIGN ELEMENTS
+   =============================================== */
+
+/* Executive Glass Morphism Effects */
+.glass-executive {
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(229, 231, 235, 0.1);
+  box-shadow: var(--box-shadow-executive);
+}
+
+.glass-luxury {
+  background: rgba(212, 175, 55, 0.05);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  box-shadow: var(--box-shadow-luxury);
+}
+
+.glass-wealth {
+  background: rgba(16, 185, 129, 0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(16, 185, 129, 0.15);
+}
+
+/* 3D Interactive Elements */
+.element-3d {
+  transform-style: preserve-3d;
+  perspective: 1000px;
+  transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.element-3d:hover {
+  transform: translateY(-8px) rotateX(5deg) rotateY(5deg);
+  box-shadow: var(--box-shadow-depth);
+}
+
+.card-3d {
+  transform-style: preserve-3d;
+  transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
+}
+
+.card-3d:hover {
+  transform: perspective(1000px) rotateX(-5deg) rotateY(10deg) translateY(-10px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+/* Progressive Blur Effects */
+.blur-progressive-sm {
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.blur-progressive-md {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.blur-progressive-lg {
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+
+.blur-progressive-xl {
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+}
+
+/* Bento Grid Layouts */
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-auto-rows: minmax(200px, auto);
+  gap: 1.5rem;
+  grid-auto-flow: dense;
+}
+
+.bento-item {
+  border-radius: 1rem;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.bento-item-large {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
+.bento-item-wide {
+  grid-column: span 2;
+}
+
+.bento-item-tall {
+  grid-row: span 2;
+}
+
+/* Metal Shader Effects */
+.metal-gold {
+  background: var(--gradient-gold);
+  position: relative;
+  overflow: hidden;
+}
+
+.metal-gold::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent 40%, rgba(255, 255, 255, 0.3) 50%, transparent 60%);
+  animation: metalShine 3s infinite;
+}
+
+.metal-platinum {
+  background: var(--gradient-platinum);
+  position: relative;
+  overflow: hidden;
+}
+
+.metal-platinum::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent 40%, rgba(255, 255, 255, 0.4) 50%, transparent 60%);
+  animation: metalShine 2.5s infinite;
+}
+
+.metal-brushed {
+  background: var(--gradient-metal);
+  position: relative;
+}
+
+.metal-brushed::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent,
+    transparent 2px,
+    rgba(255, 255, 255, 0.05) 2px,
+    rgba(255, 255, 255, 0.05) 4px
+  );
+}
+
+/* Executive Button Styles */
+.btn-executive {
+  background: var(--gradient-executive);
+  color: var(--color-platinum-light);
+  border: 1px solid rgba(229, 231, 235, 0.2);
+  padding: 0.75rem 2rem;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+  box-shadow: var(--box-shadow-executive);
+}
+
+.btn-executive:hover {
+  background: linear-gradient(135deg, #1E293B 0%, #334155 50%, #475569 100%);
+  transform: translateY(-2px);
+  box-shadow: var(--box-shadow-depth);
+  border-color: rgba(212, 175, 55, 0.3);
+}
+
+.btn-luxury {
+  background: var(--gradient-gold);
+  color: var(--color-deep-navy);
+  border: none;
+  padding: 0.875rem 2.5rem;
+  border-radius: 0.875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  box-shadow: var(--box-shadow-luxury);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-luxury:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 12px 40px rgba(212, 175, 55, 0.25);
+}
+
+.btn-wealth {
+  background: var(--gradient-wealth);
+  color: var(--color-platinum-light);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  padding: 0.75rem 2rem;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(16, 185, 129, 0.15);
+}
+
+.btn-wealth:hover {
+  background: linear-gradient(135deg, #0B1426 0%, #059669 100%);
+  border-color: rgba(16, 185, 129, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(16, 185, 129, 0.25);
+}
+
+/* Premium Data Visualization */
+.chart-executive {
+  background: var(--gradient-executive);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: var(--box-shadow-executive);
+  border: 1px solid rgba(229, 231, 235, 0.1);
+}
+
+.metric-luxury {
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(212, 175, 55, 0.05) 100%);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.metric-luxury::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--gradient-gold);
+}
+
+/* Executive Typography */
+.heading-executive {
+  font-family: var(--font-family-display);
+  font-weight: 700;
+  background: var(--gradient-platinum);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.025em;
+}
+
+.text-luxury {
+  color: var(--color-champagne-gold);
+  font-weight: 600;
+  text-shadow: 0 2px 4px rgba(212, 175, 55, 0.2);
+}
+
+.text-wealth {
+  color: var(--color-emerald-success);
+  font-weight: 600;
+}
+
+.text-executive {
+  color: var(--color-platinum);
+  font-weight: 500;
+}
+
+/* Premium Animations */
+@keyframes metalShine {
+  0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+  100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+}
+
+@keyframes luxuryPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.05); }
+}
+
+@keyframes wealthGlow {
+  0%, 100% { box-shadow: 0 0 20px rgba(16, 185, 129, 0.2); }
+  50% { box-shadow: 0 0 40px rgba(16, 185, 129, 0.4); }
+}
+
+.animate-luxury-pulse {
+  animation: luxuryPulse 3s ease-in-out infinite;
+}
+
+.animate-wealth-glow {
+  animation: wealthGlow 2s ease-in-out infinite;
+}
+
+/* Executive Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.3);
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--gradient-gold);
+  border-radius: 6px;
+  border: 2px solid rgba(15, 23, 42, 0.3);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #E6C757 0%, #D4AF37 50%, #B8941F 100%);
+}
+
+/* Premium Text Selection */
+::selection {
+  background: rgba(212, 175, 55, 0.3);
+  color: var(--color-platinum-light);
+}
+
+::-moz-selection {
+  background: rgba(212, 175, 55, 0.3);
+  color: var(--color-platinum-light);
+}
+
+/* Executive Layout Utilities */
+.container-executive {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.section-executive {
+  padding: 6rem 0;
+  background: var(--gradient-executive);
+}
+
+.divider-luxury {
+  height: 1px;
+  background: var(--gradient-gold);
+  border: none;
+  margin: 3rem 0;
+}
+
+/* Responsive Premium Design */
+@media (max-width: 768px) {
+  .bento-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .bento-item-large,
+  .bento-item-wide {
+    grid-column: span 1;
+  }
+  
+  .btn-luxury,
+  .btn-executive,
+  .btn-wealth {
+    padding: 0.875rem 1.5rem;
+    font-size: 0.875rem;
+  }
+  
+  .element-3d:hover,
+  .card-3d:hover {
+    transform: none;
+  }
+}

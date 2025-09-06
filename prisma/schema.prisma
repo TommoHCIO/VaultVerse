@@ -1,0 +1,508 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User Management
+model User {
+  id                String   @id @default(cuid())
+  walletAddress     String   @unique
+  email             String?  @unique
+  username          String?  @unique
+  displayName       String?
+  avatar            String?
+  bio               String?
+  isVerified        Boolean  @default(false)
+  isActive          Boolean  @default(true)
+  
+  // Token Version System
+  tokenVersion      TokenVersion @default(V1)
+  totalTokenBalance BigInt       @default(0)
+  stakedAmount      BigInt       @default(0)
+  stakingStartDate  DateTime?
+  stakingEndDate    DateTime?
+  
+  // Gamification
+  level             Int      @default(1)
+  xp                Int      @default(0)
+  totalWagered      BigInt   @default(0)
+  totalWinnings     BigInt   @default(0)
+  winRate           Float    @default(0.0)
+  streak            Int      @default(0)
+  maxStreak         Int      @default(0)
+  
+  // Timestamps
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  lastActive        DateTime @default(now())
+  
+  // Relationships
+  positions         Position[]
+  eventParticipations EventParticipation[]
+  achievements      UserAchievement[]
+  notifications     Notification[]
+  referrals         User[]   @relation("UserReferrals")
+  referredBy        User?    @relation("UserReferrals", fields: [referredById], references: [id])
+  referredById      String?
+  socialConnections SocialConnection[]
+  transactions      Transaction[]
+  
+  @@map("users")
+}
+
+// Token Version Enum
+enum TokenVersion {
+  V1
+  V2
+  V3
+  V4
+  V5
+}
+
+// Market Management
+model Market {
+  id            String        @id @default(cuid())
+  contractId    String        @unique // On-chain market ID
+  title         String
+  description   String
+  imageUrl      String?
+  category      String
+  
+  // Market Configuration
+  outcomes      Json          // Array of possible outcomes
+  minBet        BigInt
+  maxBet        BigInt
+  totalVolume   BigInt        @default(0)
+  totalPositions Int          @default(0)
+  
+  // Shield Configuration
+  shieldEnabled  Boolean      @default(true)
+  shieldCost     Float        @default(0.05) // Percentage cost
+  maxShieldCover Int          @default(30)   // Max percentage coverage
+  
+  // Oracle Configuration
+  oracleType    OracleType
+  oracleConfig  Json          // Oracle-specific configuration
+  
+  // Timing
+  startTime     DateTime
+  endTime       DateTime
+  resolvedAt    DateTime?
+  
+  // Resolution
+  isResolved    Boolean       @default(false)
+  winningOutcome Int?
+  resolvedValue  BigInt?
+  
+  // Liquidity & Odds
+  liquidityPool  Json         // Current liquidity for each outcome
+  currentOdds    Json         // Current odds for each outcome
+  
+  // Metadata
+  tags          String[]
+  difficulty    Difficulty    @default(EASY)
+  featured      Boolean       @default(false)
+  isActive      Boolean       @default(true)
+  
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  
+  // Relationships
+  positions     Position[]
+  events        MarketEvent[]
+  
+  @@map("markets")
+}
+
+enum OracleType {
+  CHAINLINK_PRICE
+  CHAINLINK_CUSTOM
+  MANUAL
+  API_FEED
+  CONSENSUS
+}
+
+enum Difficulty {
+  EASY
+  MEDIUM
+  HARD
+  EXPERT
+}
+
+// User Positions in Markets
+model Position {
+  id              String    @id @default(cuid())
+  userId          String
+  marketId        String
+  
+  // Position Details
+  outcome         Int       // Which outcome they bet on
+  amount          BigInt    // Amount wagered
+  odds            Float     // Odds at time of bet
+  potentialWin    BigInt    // Potential winnings
+  
+  // Shield Configuration
+  shieldEnabled   Boolean   @default(false)
+  shieldPercentage Int      @default(0)
+  shieldCost      BigInt    @default(0)
+  
+  // Status
+  isWinning       Boolean?  // null = unresolved, true = win, false = loss
+  payout          BigInt?   // Actual payout received
+  shieldPayout    BigInt?   // Shield compensation if applicable
+  
+  // Timestamps
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  claimedAt       DateTime?
+  
+  // Relationships
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  market          Market    @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  transactions    Transaction[]
+  
+  @@map("positions")
+}
+
+// Vaultor Events (Live Events)
+model VaultorEvent {
+  id              String     @id @default(cuid())
+  title           String
+  description     String
+  imageUrl        String?
+  
+  // Event Configuration
+  questionCount   Int        @default(25)
+  duration        Int        @default(900) // 15 minutes in seconds
+  entryFee        BigInt
+  maxParticipants Int?
+  
+  // Prize Pool
+  totalPrizePool  BigInt     @default(0)
+  prizeDistribution Json     // How prizes are distributed (%, positions)
+  
+  // Timing
+  scheduledAt     DateTime
+  startedAt       DateTime?
+  endedAt         DateTime?
+  
+  // Status
+  status          EventStatus @default(SCHEDULED)
+  isLive          Boolean    @default(false)
+  participantCount Int       @default(0)
+  
+  // Content
+  questions       Json       // Array of questions with answers
+  
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+  
+  // Relationships
+  participations  EventParticipation[]
+  
+  @@map("vaultor_events")
+}
+
+enum EventStatus {
+  SCHEDULED
+  LIVE
+  COMPLETED
+  CANCELLED
+}
+
+// Event Participation
+model EventParticipation {
+  id            String       @id @default(cuid())
+  userId        String
+  eventId       String
+  
+  // Performance
+  score         Int          @default(0)
+  correctAnswers Int         @default(0)
+  timeBonus     Int          @default(0)
+  finalRank     Int?
+  
+  // Answers
+  answers       Json         // User's answers with timestamps
+  
+  // Rewards
+  prizeWon      BigInt       @default(0)
+  tokenReward   BigInt       @default(0)
+  xpGained      Int          @default(0)
+  
+  // Status
+  isComplete    Boolean      @default(false)
+  paidOut       Boolean      @default(false)
+  
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  
+  // Relationships
+  user          User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  event         VaultorEvent @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, eventId])
+  @@map("event_participations")
+}
+
+// Achievement System
+model Achievement {
+  id              String    @id @default(cuid())
+  name            String    @unique
+  description     String
+  icon            String?
+  
+  // Requirements
+  type            AchievementType
+  requirement     Json      // Specific requirements (depends on type)
+  
+  // Rewards
+  xpReward        Int       @default(0)
+  tokenReward     BigInt    @default(0)
+  badgeUrl        String?
+  
+  // Metadata
+  rarity          Rarity    @default(COMMON)
+  category        String
+  isActive        Boolean   @default(true)
+  
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  
+  // Relationships
+  userAchievements UserAchievement[]
+  
+  @@map("achievements")
+}
+
+enum AchievementType {
+  WINS
+  STREAK
+  VOLUME
+  EVENTS
+  SOCIAL
+  SPECIAL
+}
+
+enum Rarity {
+  COMMON
+  RARE
+  EPIC
+  LEGENDARY
+}
+
+// User Achievement Junction
+model UserAchievement {
+  id            String      @id @default(cuid())
+  userId        String
+  achievementId String
+  
+  // Progress
+  progress      Int         @default(0)
+  isCompleted   Boolean     @default(false)
+  completedAt   DateTime?
+  
+  // Rewards
+  rewardClaimed Boolean     @default(false)
+  claimedAt     DateTime?
+  
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  
+  // Relationships
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  achievement   Achievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, achievementId])
+  @@map("user_achievements")
+}
+
+// Transaction Logging
+model Transaction {
+  id              String          @id @default(cuid())
+  userId          String?
+  
+  // Transaction Details
+  type            TransactionType
+  amount          BigInt
+  currency        String          @default("ETH")
+  
+  // References
+  marketId        String?
+  positionId      String?
+  eventId         String?
+  
+  // Blockchain
+  txHash          String?         @unique
+  blockNumber     BigInt?
+  gasUsed         BigInt?
+  gasPrice        BigInt?
+  
+  // Status
+  status          TxStatus        @default(PENDING)
+  
+  // Metadata
+  description     String?
+  metadata        Json?
+  
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  
+  // Relationships
+  user            User?           @relation(fields: [userId], references: [id], onDelete: SetNull)
+  position        Position?       @relation(fields: [positionId], references: [id], onDelete: SetNull)
+  
+  @@map("transactions")
+}
+
+enum TransactionType {
+  BET
+  WIN_PAYOUT
+  SHIELD_PAYOUT
+  EVENT_ENTRY
+  EVENT_PRIZE
+  TOKEN_STAKE
+  TOKEN_UNSTAKE
+  TOKEN_REWARD
+  REFERRAL_BONUS
+}
+
+enum TxStatus {
+  PENDING
+  CONFIRMED
+  FAILED
+  CANCELLED
+}
+
+// Market Events (Price updates, volume changes, etc.)
+model MarketEvent {
+  id          String    @id @default(cuid())
+  marketId    String
+  
+  // Event Details
+  type        String    // 'odds_update', 'volume_change', 'large_bet', etc.
+  data        Json      // Event-specific data
+  
+  // Timing
+  timestamp   DateTime  @default(now())
+  
+  // Relationships
+  market      Market    @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  
+  @@map("market_events")
+}
+
+// Notification System
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String
+  
+  // Content
+  title     String
+  message   String
+  type      NotificationType
+  
+  // Action
+  actionUrl String?
+  metadata  Json?
+  
+  // Status
+  isRead    Boolean          @default(false)
+  readAt    DateTime?
+  
+  createdAt DateTime         @default(now())
+  
+  // Relationships
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("notifications")
+}
+
+enum NotificationType {
+  MARKET_RESOLVED
+  POSITION_WON
+  POSITION_LOST
+  EVENT_STARTING
+  EVENT_RESULT
+  ACHIEVEMENT_EARNED
+  SHIELD_ACTIVATED
+  SYSTEM_UPDATE
+}
+
+// Social Features
+model SocialConnection {
+  id          String     @id @default(cuid())
+  userId      String
+  
+  // Connection Details
+  platform    String     // 'twitter', 'discord', 'telegram'
+  platformId  String     // User ID on that platform
+  username    String
+  verified    Boolean    @default(false)
+  
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  
+  // Relationships
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, platform])
+  @@map("social_connections")
+}
+
+// Admin/Analytics Tables
+model SystemMetrics {
+  id              String   @id @default(cuid())
+  
+  // Platform Metrics
+  totalUsers      Int
+  activeUsers24h  Int
+  activeUsers7d   Int
+  totalVolume     BigInt
+  totalMarkets    Int
+  activeMarkets   Int
+  
+  // Token Metrics
+  totalSupply     BigInt
+  totalStaked     BigInt
+  v1Users         Int
+  v2Users         Int
+  v3Users         Int
+  v4Users         Int
+  v5Users         Int
+  
+  // Event Metrics
+  eventsToday     Int
+  eventParticipants Int
+  avgEventScore   Float
+  
+  // Revenue Metrics
+  platformRevenue BigInt
+  shieldRevenue   BigInt
+  eventRevenue    BigInt
+  
+  // Timestamp
+  recordedAt      DateTime @default(now())
+  
+  @@map("system_metrics")
+}
+
+// Configuration Management
+model SystemConfig {
+  id            String   @id @default(cuid())
+  key           String   @unique
+  value         Json
+  description   String?
+  
+  updatedAt     DateTime @updatedAt
+  updatedBy     String?  // Admin user ID
+  
+  @@map("system_config")
+}

@@ -1,0 +1,99 @@
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: [
+    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+  ],
+  darkMode: 'class',
+  theme: {
+    extend: {
+      colors: {
+        // VaultorVerse Brand Colors
+        'vaultor-dark': '#0a0a0a',
+        'vaultor-light': '#1a1a2e',
+        
+        // Neon Colors for 2025 Design
+        'neon': {
+          'cyan': '#00ccff',
+          'green': '#00ff88', 
+          'purple': '#8b5cf6',
+          'pink': '#ff6b9d',
+          'yellow': '#ffeb3b'
+        },
+        
+        // Shield Colors for Token System
+        'shield': {
+          'gold': '#ffd700',
+          'silver': '#c0c0c0',
+          'bronze': '#cd7f32'
+        },
+        
+        // Glass Morphism Colors
+        'glass': {
+          'bg': 'rgba(255, 255, 255, 0.05)',
+          'bg-light': 'rgba(255, 255, 255, 0.1)',
+          'border': 'rgba(255, 255, 255, 0.1)'
+        }
+      },
+      
+      fontFamily: {
+        sans: ['var(--font-geist-sans)', 'system-ui', 'sans-serif'],
+        mono: ['var(--font-geist-mono)', 'monospace'],
+      },
+      
+      animation: {
+        'pulse-glow': 'pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'float': 'float 6s ease-in-out infinite',
+        'glow': 'glow 2s ease-in-out infinite alternate',
+      },
+      
+      keyframes: {
+        'pulse-glow': {
+          '0%, 100%': {
+            opacity: '1',
+            boxShadow: '0 0 20px rgba(0, 255, 136, 0.5)'
+          },
+          '50%': {
+            opacity: '0.8',
+            boxShadow: '0 0 40px rgba(0, 255, 136, 0.8)'
+          }
+        },
+        'float': {
+          '0%, 100%': { transform: 'translateY(0px)' },
+          '50%': { transform: 'translateY(-20px)' }
+        },
+        'glow': {
+          'from': { 
+            textShadow: '0 0 20px #00ff88, 0 0 30px #00ff88, 0 0 40px #00ff88'
+          },
+          'to': { 
+            textShadow: '0 0 10px #00ff88, 0 0 20px #00ff88, 0 0 30px #00ff88'
+          }
+        }
+      },
+      
+      backdropBlur: {
+        xs: '2px',
+      },
+      
+      boxShadow: {
+        'glow-sm': '0 0 10px rgba(0, 255, 136, 0.3)',
+        'glow': '0 0 20px rgba(0, 255, 136, 0.5)',
+        'glow-lg': '0 0 40px rgba(0, 255, 136, 0.7)',
+        'neon': '0 0 5px #00ccff, 0 0 20px #00ccff',
+      },
+      
+      backgroundImage: {
+        'mesh-gradient': `
+          radial-gradient(ellipse 80% 80% at 50% -20%, rgba(120, 119, 198, 0.15), transparent),
+          radial-gradient(ellipse 80% 80% at 80% 50%, rgba(255, 136, 0, 0.1), transparent),
+          radial-gradient(ellipse 80% 80% at 0% 50%, rgba(0, 255, 136, 0.1), transparent),
+          radial-gradient(ellipse 80% 80% at 50% 100%, rgba(0, 204, 255, 0.1), transparent),
+          linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%)
+        `,
+      }
+    },
+  },
+  plugins: [],
+};
